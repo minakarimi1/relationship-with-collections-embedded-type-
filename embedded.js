@@ -10,7 +10,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/embeddedDB')
 
 const bookSchema = new mongoose.Schema({
   title: {type: String},
-  Number: {type: Number},
+  pages: {type: Number},
 })
 
 const Books = mongoose.model('Books', bookSchema);
@@ -22,8 +22,23 @@ const Users =mongoose.model('Users', new mongoose.Schema({
 }));
 
 
+async function createUser(first_name,last_name,book){
+  const users = new Users({
+    first_name,
+    last_name,
+    book,
+  });
+  const result = await users.save();
+  console.log(result);
+};
+createUser('mina','karimi',new Books({title:'nodejs programing', pages: 150}));
 
+async function getUser(){
+  const result = await Users.find()
+  console.log(result);
+}
 
+getUser();
 
 app.listen(port,()=>{
   console.log(`server run on port: ${port}`);
