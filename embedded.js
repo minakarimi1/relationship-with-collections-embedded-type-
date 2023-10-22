@@ -17,38 +17,40 @@ const bookSchema = new mongoose.Schema({
 const Books = mongoose.model('Books', bookSchema);
 
 
-const Users =mongoose.model('Users', new mongoose.Schema({
+const Users = mongoose.model('Users', new mongoose.Schema({
   first_name: { type: String },
   last_name: { type: String },
-  book: bookSchema,
+  books: [bookSchema],
 }));
 
 //>>> create function from add new user <<<
-async function createUser(first_name,last_name,book){
+async function createUser(first_name,last_name,books){
   const users = new Users({
     first_name,
     last_name,
-    book,
+    books,
   });
   const result = await users.save();
   console.log(result);
 };
-// createUser('mina','karimi',new Books({title:'nodejs programing', pages: 150}));
+// createUser('mina','karimi',[
+//   new Books({title:'nodejs programing', pages: 150}),
+//   new Books({title:'javaScript programing' , pages: 200}),
+//   new Books({title:'html programing' , pages: 200}),
+//   ]);
 
-
-//>>> update user <<<
-async function updateUser(id){
-  await Users.updateMany({_id:id},{
-    $set : {
-      'book.title': 'nodejs',
-      'book.pages': 100,
-    }
-  })
+//>>> add book <<<
+async function addBook(userId, book){
+ const user = await Users.findById(userId);
+ user.books.push(book);
+ await user.save();
 }
-// updateUser('6534c686452881023439ea66');
+addBook('6535611801f55c4dc6999e11',new Books({title: 'c++ programing', pages: 500}));
 
 
+//>>> update book <<<
 //update with try catch
+
 async function updateUser1(id) {
   try {
     // Assuming that you are using a MongoDB model for the User
@@ -58,7 +60,7 @@ async function updateUser1(id) {
       return;
     }
     // Update the book title
-    user.book.title = 'JavaScript3';
+    user.books.title = 'JavaScript3';
 
     // Save the changes to the database
     const result = await user.save();
@@ -68,18 +70,9 @@ async function updateUser1(id) {
     console.error("Error updating user:", error);
   }
 }
-// updateUser1('6534e4e45fc465bba1d8eede');
+updateUser1('6534e4e45fc465bba1d8eede');
 
-//>>> unset book <<<
-async function unSetbook(id){
-  await Users.updateMany({_id:id},{
-    $unset:{
-      'book' : '',          //remove all book
-      // 'book.title': '',  //remove only title
-    }
-  })
-}
-unSetbook('6533fed328e0860fdae1eb8c')
+//>>> remove book <<<
 
 
 //>>> get user <<<
