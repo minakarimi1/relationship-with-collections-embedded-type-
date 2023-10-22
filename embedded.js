@@ -45,8 +45,33 @@ async function updateUser(id){
     }
   })
 }
-updateUser('6533fed328e0860fdae1eb8c');
+// updateUser('6534c686452881023439ea66');
 
+
+//update with try catch
+async function updateUser1(id) {
+  try {
+    // Assuming that you are using a MongoDB model for the User
+    const user = await Users.findById(id);
+
+    if (!user) {
+      console.log("User not found");
+      return;
+    }
+
+    // Update the book title
+    user.book.title = 'JavaScript3';
+
+    // Save the changes to the database
+    const result = await user.save();
+
+    console.log(result);
+  } catch (error) {
+    console.error("Error updating user:", error);
+  }
+}
+
+updateUser1('6534c686452881023439ea66');
 
 //>>> get user <<<
 async function getUser(){
