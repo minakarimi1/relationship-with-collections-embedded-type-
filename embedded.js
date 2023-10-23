@@ -100,14 +100,24 @@ async function updateUser1(id) {
 // updateUser1('6534e4e45fc465bba1d8eede');
 
 //>>> remove book <<<
+async function removeBook(userId , bookId){
+   await Users.findByIdAndUpdate(userId,{
+    '$pull':{
+      'books':{
+        '_id':bookId
+      }
+    }
+  });
 
+}
+removeBook('6535611801f55c4dc6999e11','65356203c6205f03555ff0b5');
 
 //>>> get user <<<
 async function getUser(){
   const result = await Users.find()
   console.log(result);
 }
-// getUser();
+getUser();
 
 
 
