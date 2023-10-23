@@ -45,7 +45,34 @@ async function addBook(userId, book){
  user.books.push(book);
  await user.save();
 }
-addBook('6535611801f55c4dc6999e11',new Books({title: 'c++ programing', pages: 500}));
+// addBook('6535611801f55c4dc6999e11',new Books({title: 'c++ programing', pages: 500}));
+
+
+// update array books 
+async function updateUserArryBook(id){
+  try{
+    const user = await Users.findById(id)
+    if(!user) return console.log('not fond user');
+
+    const bookTitle = user.books.find(book => book.title==='nodejs programing')
+
+    if(bookTitle){
+      bookTitle.title="javaScript"
+      const result = await user.save()
+       console.log("update title");
+       console.log(result);
+    } else{
+      console.log("not update title");
+
+    }
+
+  }catch(error){
+    console.error("Error update user" + error);
+  }
+}
+
+// updateUserArryBook('65360690c7f47479425e7e0e')
+
 
 
 //>>> update book <<<
@@ -70,7 +97,7 @@ async function updateUser1(id) {
     console.error("Error updating user:", error);
   }
 }
-updateUser1('6534e4e45fc465bba1d8eede');
+// updateUser1('6534e4e45fc465bba1d8eede');
 
 //>>> remove book <<<
 
@@ -80,7 +107,7 @@ async function getUser(){
   const result = await Users.find()
   console.log(result);
 }
-getUser();
+// getUser();
 
 
 
